@@ -1,0 +1,8 @@
+{
+  "labs" : [1,2,3,4,6,7],
+  "submissions_dir" : "./submissions/",
+  "solutions_dir" : "./solutions/",
+  "results_dir": "./results/",
+  "result_csv_path" : "./csv/",
+  "result_csv_name" : "result.csv"
+}

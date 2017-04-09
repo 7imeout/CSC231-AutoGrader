@@ -1,0 +1,61 @@
+p01b =
+   32.9300
+ KMLTOMPG converts kilometers per liter to miles per gallon
+    KMLTOMPG(KML) has one parameter KML (kilometers per liter)
+    Returns scalar mpg
+
+p02b =
+  -74.2056
+    3.0537
+    5.1513
+         0
+    7.4065
+   27.7430
+   52.8245
+   69.4615
+p04 =
+   24.5872
+ MPHTOMETS converts miles per hour to meters per second
+    MPHTOMETS(MPH) has one scalar parameter, MPH (milers per hour)
+    Returns scalar mps
+
+p06a =
+    9.9216
+ TRIANGLE calculates area of triangle
+    TRIANGLE(A,B,C) has three scalar parameters, triangle side lengths A,B,C
+    Returns scalar area of triangle
+
+p18b =
+   87.8853
+ TRIAREA calculates area of triangle
+    TRIAREA(A,B,C) has three vector parameters, the coordinates A,B,C
+       Each of the vectors A,B,C should each have a length of 3
+    Returns scalar area of triangle
+
+p25a =
+   32.7352   16.6433
+p25b =
+ -118.8108   22.8254
+p25c =
+  165.0686   15.5242
+p25d =
+  -60.1240   27.1017
+ CARTTOPOLAR converts x y coordinates to polar coordinates
+    CARTTOPOLAR(X,Y) has two scalar parameters, x and y
+    Returns two scalar values, [th, rad]
+
+p34 =
+  258.2759
+ CENTROIDT calculates centroid along y axis
+    CENTROIDT(W,H,T,D) has four parameters that describe tee shape,
+       W is overall width of tee
+       H is overall height of tee
+       T is thickness of beam on top of tee
+       D is width of vertical tee post 
+    Returns scalar y, that is the centroid along the y axis
+
+
+Your variables are:
+
+p01b  p02b  p04   p06a  p18b  p25a  p25b  p25c  p25d  p34   
+

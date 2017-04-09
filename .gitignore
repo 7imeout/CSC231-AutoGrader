@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# IntelliJ platform (IDE) files
+.idea
+
+# input and output directories
+csv
+results
+submissions
