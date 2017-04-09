@@ -30,7 +30,7 @@ Inner workings of this auto-grader are optimized based on the assumption that st
 ```
 * `dir_LM.dat` is a data file for MATLAB used by `generate_output.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a local-machine run.
 * `dir_VM.dat` is a data file for MATLAB used by `generate_output_vm.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a virtual machine run.
-* `diff_config.json` is a JSON file that holds some runtime configurations for the script. Only attribute you'll need to change in this file is `labs`, to select which labs to grade. By default, it is set to grade all non-plotting labs (excluding the final exam).
+* `diff_config.json` is a JSON file that holds some runtime configurations for the script. Only attribute you'll need to change in this file is `labs`, to select which labs to grade. By default, it is set to grade all non-plotting labs (excluding the final exam, denoted by number `0`).
 
 
 #### Things that won't matter much to you
@@ -41,19 +41,20 @@ Inner workings of this auto-grader are optimized based on the assumption that st
 ~$ python3 diff.py -vm
 ```
 
-How to Use it
+How to Use
 -------------
-1. Download "ALL" student submissions as a ZIP archive from **PolyLearn**.
-2. Unzip the archive, and place individual submission folders, usually named something like `Firstname_Lastname_123456_assignsubmission_file_` into the appropriate `labXX` directory under `/submissions`.
-3. Run the following command in shell:  ``` ~$ python3 diff.py [-vm] ```
-4. The script should run, and when it finishes without encountering any unexpected errors, you should see text files generated under `/results` directory, and a grading result summarized in a CSV file under `/csv`.
+1. Run the following command in shell:  ``` ~$ python3 diff.py```. Initial run will detect the lack of required working directory structures and run some setup without grading anything.
+2. Download "ALL" student submissions as a ZIP archive from **PolyLearn**.
+3. Unzip the archive, and place individual submission folders, usually named something like `Firstname_Lastname_123456_assignsubmission_file_` into the appropriate `labXX` directory under `/submissions`.
+4. Run the following command in shell:  ``` ~$ python3 diff.py [-vm] ```. This is to actually run auto-grade. `-vm` is optional.
+5. When the script finishes execution without encountering any unexpected errors, you should see text files generated under `/results` directory, and a grading result summarized in a CSV file under `/csv`.
 
 
 > **Note:**
 
 > - Student submission that causes runtime error during MATLAB run will simply cause the student's output to include the MATLAB error message.
 > - If a student's output matched the reference output 100%, **True** will be shown on the CSV. If there was *any* mismatch, **False** will be shown. If there was no submission for the given lab, no entry will be shown.
-> - To further investigate the cause of any mismatches, I recommend using `diff`, or [diffchecker.com](https://diffchecker.com)
+> - To further investigate the cause of any mismatches, I recommend using `diff`, or [diffchecker.com](https://diffchecker.com).
 
 Known Issues
 -------------
