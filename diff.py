@@ -54,7 +54,7 @@ def run_init_setup(config):
 def mkdir(dir):
     print('   mkdir', dir)
     if not os.path.isdir(dir):
-        mkdir(dir)
+        os.mkdir(dir)
 
 
 def write_lab_list_for_MATLAB(config):
