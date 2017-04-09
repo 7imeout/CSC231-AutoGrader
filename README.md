@@ -55,6 +55,10 @@ How to Use it
 > - If a student's output matched the reference output 100%, **True** will be shown on the CSV. If there was *any* mismatch, **False** will be shown. If there was no submission for the given lab, no entry will be shown.
 > - To further investigate the cause of any mismatches, I recommend using `diff`, or [diffchecker.com](https://diffchecker.com)
 
+Known Issues
+-------------
+* Students with the same first and last name will appear as a single student, with the grading result of the submission that appeared later overwriting the earlier result.
+ * Workaround for this is to manually rename one of the student's directories to avoid same names.
 
 Questions, Concerns, and Comments?
 -------------
