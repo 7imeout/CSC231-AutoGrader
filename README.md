@@ -28,12 +28,14 @@ Inner workings of this auto-grader are optimized based on the assumption that st
 ```bash
 ~$ python3 diff.py
 ```
-* `generate_output.m` is a MATLAB script that actually runs student submissions to generate the output. **You'll need to modify lines `7` and `13` to match the environment you are running the script in**.
-* `diff_config.json` is a JSON file that holds some runtime configurations for the script. Only attribute you'll need to change in this file is `labs`, to select which labs to grade. By default, it is set to grade all non-plotting labs.
+* `dir_LM.dat` is a data file for MATLAB used by `generate_output.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a local-machine run.
+* `dir_VM.dat` is a data file for MATLAB used by `generate_output_vm.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a virtual machine run.
+* `diff_config.json` is a JSON file that holds some runtime configurations for the script. Only attribute you'll need to change in this file is `labs`, to select which labs to grade. By default, it is set to grade all non-plotting labs (excluding the final exam).
 
 
 #### Things that won't matter much to you
 * `diff_adt.py` holds some abstract data types used by the script. you can mostly ignore this.
+* `generate_output.m` is a MATLAB script that actually runs student submissions to generate the output.
 * `generate_output_vm.m` is an exact copy of `generate_output.m`. I use it to lazily have two environments I can run auto-grader in. If you're only going to have a single environment to use auto-grader in, you can ignore this as well. Following the usage shown below, you can trigger the use of this MATLAB script versus the other one:
 ```bash
 ~$ python3 diff.py -vm
