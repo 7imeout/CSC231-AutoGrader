@@ -22,6 +22,8 @@ def main():
             and os.path.isdir(config.submissions_dir)):
         run_init_setup(config)
 
+    write_lab_list_for_MATLAB(config)
+
     print('Running MATLAB script ...', end='\n\n')
     print('\n\nMATLAB run ' + ('finished!' if generate_MATLAB_output() else '\n\nFAILED!'), end='\n\n')
 
@@ -53,6 +55,14 @@ def mkdir(dir):
     print('   mkdir', dir)
     if not os.path.isdir(dir):
         mkdir(dir)
+
+
+def write_lab_list_for_MATLAB(config):
+    # Write list of labs to .dat file for MATLAB to read which items to execute
+    lab_list_dat = open(config.submissions_dir + 'lab_list.dat', 'w')
+    for name in config.labs:
+        lab_list_dat.write(name + '\n')
+    lab_list_dat.close()
 
 
 def generate_MATLAB_output():
@@ -130,12 +140,6 @@ def get_config():
     lab_file_names = []
     for num in data['labs']:
         lab_file_names.append('lab{:02}.m'.format(num) if num else 'final.m')
-
-    # also write to .dat file for MATLAB to read which items to execute
-    lab_list_dat = open(data['submissions_dir'] + 'lab_list.dat', 'w')
-    for name in lab_file_names:
-        lab_list_dat.write(name + '\n')
-    lab_list_dat.close()
 
     return DiffConfig(lab_file_names,
                       data['submissions_dir'], data['solutions_dir'], data['results_dir'],
