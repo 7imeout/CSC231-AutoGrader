@@ -57,8 +57,10 @@ How to Use it
 
 Known Issues
 -------------
+* There's no feature to distinguish or separate students by class section.
+ * You can work around this by having multiple instances (copies) of this tool in separate directories, one per section, if desired.
 * Students with the same first and last name will appear as a single student, with the grading result of the submission that appeared later overwriting the earlier result.
- * Workaround for this is to manually rename one of the student's directories to avoid same names.
+ * You can work around this issue by manually renaming one of the student's directories to avoid same names.
 
 Questions, Concerns, and Comments?
 -------------
