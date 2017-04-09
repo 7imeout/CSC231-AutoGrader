@@ -42,8 +42,9 @@ def run_init_setup(config):
           'Let me set up some directories ...', end='\n\n')
     for p in [config.csv_path, config.results_dir, config.submissions_dir]:
         if p is config.submissions_dir:
+            mkdir(config.submissions_dir)
             for lab in config.labs:
-                mkdir(config.submissions_dir + lab)
+                mkdir(config.submissions_dir + lab[:-2])
         else:
             mkdir(p)
     print('\nAll set up! Now, copy student submission folders into ./submissions/labXX/'
