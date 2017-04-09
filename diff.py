@@ -45,7 +45,7 @@ def run_init_setup(config):
             for lab in config.labs:
                 mkdir(config.submissions_dir + lab)
         else:
-            mkdir(dir)
+            mkdir(p)
     print('\nAll set up! Now, copy student submission folders into ./submissions/labXX/'
           '\nOnce copying is done, please re-run:', *sys.argv)
     exit(0)
