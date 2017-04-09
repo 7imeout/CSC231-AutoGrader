@@ -5,7 +5,7 @@ class DiffConfig():
         self.solutions_dir = solutions_dir
         self.results_dir = results_dir
 
-        self.csv_header = 'Author, ' + str(labs)[1:-1]
+        self.csv_header = 'First,Last' + str(labs)[1:-1].replace(' ', '')
         self.csv_path = csv_path
         self.csv_name = csv_name
 

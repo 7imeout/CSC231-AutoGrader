@@ -16,6 +16,12 @@ def main():
 
     print('Initiating grading', *config.labs, '...', end='\n\n')
 
+    # Detect initial run or directory structure corruption and run setup
+    if not (os.path.isdir(config.csv_path)
+            and os.path.isdir(config.results_dir)
+            and os.path.isdir(config.submissions_dir)):
+        run_init_setup(config)
+
     print('Running MATLAB script ...', end='\n\n')
     print('\n\nMATLAB run ' + ('finished!' if generate_MATLAB_output() else '\n\nFAILED!'), end='\n\n')
 
@@ -29,8 +35,28 @@ def main():
     print('ALL DONE!', end='\n\n')
 
 
+def run_init_setup(config):
+    print('Looks like this is the first time you are running this script.\n'
+          'Let me set up some directories ...', end='\n\n')
+    for p in [config.csv_path, config.results_dir, config.submissions_dir]:
+        if p is config.submissions_dir:
+            for lab in config.labs:
+                mkdir(config.submissions_dir + lab)
+        else:
+            mkdir(dir)
+    print('\nAll set up! Now, copy student submission folders into ./submissions/labXX/'
+          '\nOnce copying is done, please re-run:', *sys.argv)
+    exit(0)
+
+
+def mkdir(dir):
+    print('   mkdir', dir)
+    if not os.path.isdir(dir):
+        mkdir(dir)
+
+
 def generate_MATLAB_output():
-    script = 'generate_output_vm.m' if sys.argv[1].lower() == '-vm' else 'generate_output.m'
+    script = 'generate_output_vm.m' if len(sys.argv) > 1 and sys.argv[1].lower() == '-vm' else 'generate_output.m'
     return not call(['matlab', '-nodesktop', '-nosplash', '-nodisplay', '-r',
                      "try, run('./{}'), catch exc, getReport(exc), end, exit".format(script)])
 
@@ -76,8 +102,8 @@ def output_result_to_csv(result_obj, config):
     result_tuple_list = sorted([(k, v) for k, v in result.items()])
 
     for author_name, diff_results in result_tuple_list:
-        write_to_csv(csv, author_name + ',' + per_author_result_to_csv_entry(config.labs, diff_results))
-
+        entry_str = author_name.replace('_', ',') + ',' + per_author_result_to_csv_entry(config.labs, diff_results)
+        write_to_csv(csv, entry_str)
     csv.close()
 
 
