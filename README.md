@@ -57,10 +57,14 @@ How to Use it
 
 Known Issues
 -------------
+* Default reference outputs provided in `/solutions` isn't necessarily correct for what your student outputs will be in the environment you are running this tool in. Using default reference outputs **will** cause mismatches due to different formating.
+> I **strongly recommend** that you generate your own reference outputs using your lab solution in the environment you'll be grading in. Feature to automatically generate reference output given the solution MATLAB files will be added soon ...
+
 * There's no feature to distinguish or separate students by class section.
- * You can work around this by having multiple instances (copies) of this tool in separate directories, one per section, if desired.
+> You can work around this by having multiple instances (copies) of this tool in separate directories, one per section, if desired.
+
 * Students with the same first and last name will appear as a single student, with the grading result of the submission that appeared later overwriting the earlier result.
- * You can work around this issue by manually renaming one of the student's directories to avoid same names.
+> You can work around this issue by manually renaming one of the student's directories to avoid same names.
 
 Questions, Concerns, and Comments?
 -------------
