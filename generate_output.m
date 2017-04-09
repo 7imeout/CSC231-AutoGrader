@@ -3,14 +3,17 @@ clear;
 format short;
 format compact;
     
+%% import working directories
+dirs = importdata('./dir_LM.dat');
+
 %% cd to results dir
-cd('/Users/mryu/VirtualBox VMs/Shared/CSC-231 Autograde/results');
+cd(char(dirs(1)));
 
 %% clean up previous output
 delete('*.txt');
 
 %% cd to working dir
-cd('/Users/mryu/VirtualBox VMs/Shared/CSC-231 Autograde/submissions/');
+cd(char(dirs(2)));
 
 %% get labs to grade (written by Python)
 labs = importdata('./lab_list.dat');
