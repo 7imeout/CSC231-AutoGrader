@@ -95,3 +95,5 @@ ENV/
 csv
 results
 submissions
+solutions/*.out.txt
+solutions/source/*.m
