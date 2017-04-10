@@ -23,6 +23,9 @@ def main():
         run_init_setup(config)
 
     write_lab_list_for_MATLAB(config)
+    if not setup_solution_files(config):
+        print('\n\nUnable to set up reference solutions. Exiting.')
+        exit(1)
 
     print('Running MATLAB script ...', end='\n\n')
     print('\n\nMATLAB run ' + ('finished!' if generate_MATLAB_output() else '\n\nFAILED!'), end='\n\n')
@@ -64,6 +67,41 @@ def write_lab_list_for_MATLAB(config):
     for name in config.labs:
         lab_list_dat.write(name + '\n')
     lab_list_dat.close()
+
+
+def setup_solution_files(config):
+    new_solutions_success = False
+    default_solution_success = False
+
+    if check_solution_source(config):
+        print('Solution source for all labs detected.\n',
+              'Generating a new set of reference solutions ... ', end='')
+        new_solutions_success = generate_new_solutions(config)
+        print('done!' if new_solutions_success else 'failed :(')
+
+    if not new_solutions_success:
+        print('Copying default solutions over instead ... ', end='')
+        default_solution_success = copy_default_solutions(config)
+        print('done!' if default_solution_success else 'failed again!\n'
+                                                       'Please check permissions.')
+
+    return new_solutions_success or default_solution_success
+
+
+def check_solution_source(config):
+    result = True
+    for lab in config.labs:
+        result &= os.path.isfile(config.solutions_dir + 'source/' + lab)
+    return result
+
+
+def generate_new_solutions(config):
+    return not call(['matlab', '-nodesktop', '-nosplash', '-nodisplay', '-r',
+                     "try, run('./generate_solution'), catch exc, getReport(exc), end, exit"])
+
+
+def copy_default_solutions(config):
+    return not call(['cp', config.solutions_dir + '*.txt', config.solutions_dir])
 
 
 def generate_MATLAB_output():
