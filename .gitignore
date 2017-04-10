@@ -97,3 +97,6 @@ results
 submissions
 solutions/*.out.txt
 solutions/source/*.m
+
+# matlab temporary files
+*.m~
