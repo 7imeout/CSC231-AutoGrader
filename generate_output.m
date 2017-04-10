@@ -92,11 +92,9 @@ for l = 1:num_labs
         fprintf('---------^----------^----------^----------^---------\n\n');
 
         cd ../../
-        dirs = importdata('./dir_list.dat');
     end
 end
 
 %% cleanup
 clear;
 delete('*.dat');
-clc;
