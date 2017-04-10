@@ -7,6 +7,13 @@ This is a auto-grading script that uses simple diff to check students' assignmen
 This auto-grading script is only effective if the students were instructed to match the output exactly to the smallest detail possible.
 
 ----------
+New Features
+-------------
+Last update: Sunday, April 9, 2017
+
+* This tool can now generate a reference solution from the given MATLAB source code. Place instructor solutions under `/solutions/source/`.
+* If the source code to generate reference solution is not provided, default reference solutions under `/solutions/default/` will be used. See **Known Issues** below for more information about the default solutions.
+
 Requirements
 -------------
 This script requires that you have the following installed on the machine in which it runs:
@@ -24,17 +31,17 @@ How to Set it Up
 Inner workings of this auto-grader are optimized based on the assumption that student submissions were downloaded from **PolyLearn** (Moodle-based course management system used at Cal Poly), unzipped, and copied into the working directory.
 
 #### Things you should know about
-* `diff.py` is the main script you'll run. Use the following command on your machine's console: 
-```bash
-~$ python3 diff.py
-```
 * `dir_LM.dat` is a data file for MATLAB used by `generate_output.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a local-machine run.
 * `dir_VM.dat` is a data file for MATLAB used by `generate_output_vm.m`. In it, you should list *full path* for two directories: **results** and **submissions**, in that order. This serves as a list of working directories for a virtual machine run.
 * `diff_config.json` is a JSON file that holds some runtime configurations for the script. Only attribute you'll need to change in this file is `labs`, to select which labs to grade. By default, it is set to grade all non-plotting labs (excluding the final exam, denoted by number `0`).
-
+* `diff.py` is the main script you'll run. Use the following command on your machine's console:
+```bash
+~$ python3 diff.py
+```
 
 #### Things that won't matter much to you
 * `diff_adt.py` holds some abstract data types used by the script. you can mostly ignore this.
+* `generate_solution.m` is a MATLAB script used to generate reference solutions based on the solution source code you provide.
 * `generate_output.m` is a MATLAB script that actually runs student submissions to generate the output.
 * `generate_output_vm.m` is an exact copy of `generate_output.m`. I use it to lazily have two environments I can run auto-grader in. If you're only going to have a single environment to use auto-grader in, you can ignore this as well. Following the usage shown below, you can trigger the use of this MATLAB script versus the other one:
 ```bash
@@ -43,11 +50,15 @@ Inner workings of this auto-grader are optimized based on the assumption that st
 
 How to Use
 -------------
+1. [Click here to download this tool (ZIP)](https://github.com/7imeout/CSC231-AutoGrader/archive/master.zip).
+1. Once downloaded, unzip its content, preserving the existing directory structure.
+1. You'll need to make some changes to a few files. Follow **How to Set it Up** guide above to get things set up.
 1. Run the following command in shell:  ``` ~$ python3 diff.py```. Initial run will detect the lack of required working directory structures and run some setup without grading anything.
-2. Download "ALL" student submissions as a ZIP archive from **PolyLearn**.
-3. Unzip the archive, and place individual submission folders, usually named something like `Firstname_Lastname_123456_assignsubmission_file_` into the appropriate `labXX` directory under `/submissions`.
-4. Run the following command in shell:  ``` ~$ python3 diff.py [-vm] ```. This is to actually run auto-grade. `-vm` is optional.
-5. When the script finishes execution without encountering any unexpected errors, you should see text files generated under `/results` directory, and a grading result summarized in a CSV file under `/csv`.
+1.  I **strongly recommend** that you provide your lab solutions to generate the reference solution (to be used for comparison with student outputs). Place your MATLAB source code under `/solutions/source/`.
+1. Download "ALL" student submissions as a ZIP archive from **PolyLearn**.
+1. Unzip the archive, and place individual submission folders, usually named something like `Firstname_Lastname_123456_assignsubmission_file_` into the appropriate `labXX` directory under `/submissions/`.
+1. Run the following command in shell:  ``` ~$ python3 diff.py [-vm] ```. This is to actually run auto-grade. `-vm` is optional.
+1. When the script finishes execution without encountering any unexpected errors, you should see text files generated under `/results/` directory, and a grading result summarized in a CSV file under `/csv/`.
 
 
 > **Note:**
@@ -58,8 +69,11 @@ How to Use
 
 Known Issues
 -------------
-* Default reference outputs provided in `/solutions` isn't necessarily correct for what your student outputs will be in the environment you are running this tool in. Using default reference outputs **will** cause mismatches due to different formating.
-> I **strongly recommend** that you generate your own reference outputs using your lab solution in the environment you'll be grading in. Feature to automatically generate reference output given the solution MATLAB files will be added soon ...
+* Default reference outputs provided in `/solutions/default/` isn't necessarily correct for what your student outputs will be in the environment you are running this tool in. Using default reference outputs **most likely will** cause mismatches due to different formating.
+> You can place your solution (MATLAB source code) into `/solutions/source/` for each lab you plan to grade. This tool will detect it and generate new reference solutions based on the source code provided.
+
+* While generating reference solutions from the source code provided in `/solutions/source/`, MATLAB might display warnings. These are negligible.
+> Warning displayed is due to the `delete(...)` function call that attempts to delete any existing reference solution.
 
 * There's no feature to distinguish or separate students by class section.
 > You can work around this by having multiple instances (copies) of this tool in separate directories, one per section, if desired.
