@@ -103,7 +103,12 @@ def generate_new_solutions(config):
 
 
 def copy_default_solutions(config):
-    return not call(['cp', config.solutions_dir + 'default/*.txt', config.solutions_dir])
+    result = True
+    default_dir = config.solutions_dir + 'default/'
+    for file_name in os.listdir(default_dir):
+        if '.txt' in file_name:
+            result &= not call(['cp', default_dir + file_name, config.solutions_dir])
+    return result
 
 
 def generate_MATLAB_output():
