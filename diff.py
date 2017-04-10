@@ -81,11 +81,11 @@ def setup_solution_files(config):
         print('Solution generation', 'successful' if new_solutions_success else 'failed :(')
 
     if not new_solutions_success:
-        print('Copying default solutions over instead ... ', end='')
+        print('Copying default solutions over instead ... ', end='\n   ')
         sys.stdout.flush()
         default_solution_success = copy_default_solutions(config)
-        print('done!' if default_solution_success else 'failed again!\n'
-                                                       'Please check permissions.')
+        print('\nCopy complete.' if default_solution_success
+              else 'Copy failed! Please check permissions.')
 
     return new_solutions_success or default_solution_success
 
@@ -103,7 +103,7 @@ def generate_new_solutions(config):
 
 
 def copy_default_solutions(config):
-    return not call(['cp', config.solutions_dir + '*.txt', config.solutions_dir])
+    return not call(['cp', config.solutions_dir + 'default/*.txt', config.solutions_dir])
 
 
 def generate_MATLAB_output():
