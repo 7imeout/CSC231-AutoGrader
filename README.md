@@ -23,7 +23,7 @@ This script requires that you have the following installed on the machine in whi
 * Environment variable or alias to allow command-line `matlab` run in shell
 * **OPTIONAL** a Virtual Machine or some other sandbox-like environment to run the script in, since this script runs arbitrary MATLAB code (student submissions).
 
-In theory, this script should be cross-platform, but it was only tested on **macOS** and **Linux** (Xubuntu 16.04 LTS, to be exact).
+In theory, this script should work on all *nix based environment, but it was only tested on **macOS** and **Linux** (Xubuntu 16.04 LTS, to be exact).
 
 How to Set it Up
 -------------
