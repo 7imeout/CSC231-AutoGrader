@@ -27,7 +27,7 @@ def main():
         print('\n\nUnable to set up reference solutions. Exiting.')
         exit(1)
 
-    print('Running MATLAB script ...', end='\n\n')
+    print('   Running MATLAB script to generate student outputs ...', end='\n\n')
     print('\n\nMATLAB run ' + ('finished!' if generate_MATLAB_output() else '\n\nFAILED!'), end='\n\n')
 
     print('Comparing results and writing output ...', end=' ')
@@ -75,16 +75,16 @@ def setup_solution_files(config):
 
     if check_solution_source(config):
         print('Solution source for all labs detected.\n',
-              'Firing up MATLAB to generate new solutions ...', end='\n\n')
+              '  Firing up MATLAB to generate new solutions ...', end='\n\n')
         sys.stdout.flush()
         new_solutions_success = generate_new_solutions(config)
-        print('Solution generation', 'successful' if new_solutions_success else 'failed :(')
+        print('Solution generation', 'successful!' if new_solutions_success else 'failed :(', end='\n\n')
 
     if not new_solutions_success:
         print('Copying default solutions over instead ... ', end='\n   ')
         sys.stdout.flush()
         default_solution_success = copy_default_solutions(config)
-        print('\nCopy complete.' if default_solution_success
+        print('\nCopy complete!' if default_solution_success
               else 'Copy failed! Please check permissions.')
 
     return new_solutions_success or default_solution_success
