@@ -55,10 +55,10 @@ def run_init_setup(config):
     exit(0)
 
 
-def mkdir(dir):
-    print('   mkdir', dir)
-    if not os.path.isdir(dir):
-        os.mkdir(dir)
+def mkdir(directory):
+    print('   mkdir', directory)
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
 
 
 def write_lab_list_for_MATLAB(config):
@@ -75,12 +75,14 @@ def setup_solution_files(config):
 
     if check_solution_source(config):
         print('Solution source for all labs detected.\n',
-              'Generating a new set of reference solutions ... ', end='')
+              'Firing up MATLAB to generate new solutions ...', end='\n\n')
+        sys.stdout.flush()
         new_solutions_success = generate_new_solutions(config)
-        print('done!' if new_solutions_success else 'failed :(')
+        print('Solution generation', 'successful' if new_solutions_success else 'failed :(')
 
     if not new_solutions_success:
         print('Copying default solutions over instead ... ', end='')
+        sys.stdout.flush()
         default_solution_success = copy_default_solutions(config)
         print('done!' if default_solution_success else 'failed again!\n'
                                                        'Please check permissions.')

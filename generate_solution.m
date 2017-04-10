@@ -17,11 +17,13 @@ for l = 1:num_labs
     fprintf('Genering a solution for: %s ...\n\n', lab_file_str);
 
     % output filename format is labXX.out.txt
-    output_filename = strcat(lab_name_str, '.out.txt');
-    diary(strcat('../', output_filename));
+    output_filename = strcat('../', lab_name_str, '.out.txt');
+    
+    % clean up existing outputs before outputting new
+    delete(output_filename);
+    diary(output_filename);
 
-    % run solution source code and save output
-    try
+    try % run solution source code and save output
         if exist(lab_file_str, 'file') == 2
             eval(lab_name_str);
             who;
