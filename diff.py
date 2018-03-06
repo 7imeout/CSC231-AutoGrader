@@ -1,9 +1,10 @@
 #!/usr/local/bin/python3
 
-import filecmp, json, os, sys
+import json, os, sys
 from diff_adt import DiffConfig, DiffResult
 from time import localtime, strftime
 from subprocess import call
+from diff_lev import *
 
 CURRENT_TIMESTAMP = strftime("%Y-%m-%d-%H%M", localtime())
 DEBUG_MODE = False
@@ -81,11 +82,12 @@ def setup_solution_files(config):
         print('Solution generation', 'successful!' if new_solutions_success else 'failed :(', end='\n\n')
 
     if not new_solutions_success:
-        print('Copying default solutions over instead ... ', end='\n   ')
+        print('Could not find solution sources for all labs.\n',
+              '  Copying default solutions over instead ... ', end='\n   ')
         sys.stdout.flush()
         default_solution_success = copy_default_solutions(config)
         print('\nCopy complete!' if default_solution_success
-              else 'Copy failed! Please check permissions.')
+              else 'Copy failed! Please check permissions.', end='\n\n')
 
     return new_solutions_success or default_solution_success
 
@@ -136,15 +138,15 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
             print('comparing', solution_file, 'and', submissions_dir + f, end='')
 
         if os.path.isfile(alt_solution_file):
-            diff_result = filecmp.cmp(solution_file, results_dir + f) \
-                          or (filecmp.cmp(alt_solution_file, results_dir + f))
+            diff_result = cmp(solution_file, results_dir + f) \
+                          or (cmp(alt_solution_file, results_dir + f))
         else:
-            diff_result = filecmp.cmp(solution_file, results_dir + f)
+            diff_result = cmp(solution_file, results_dir + f)
 
         if DEBUG_MODE:
             print(' ... comparison result', diff_result)
 
-        result_obj.add_result(author_name, lab_dir_name, diff_result)
+        result_obj.add_result(author_name, lab_dir_name, diff_result * 100) # scoring out of 100
 
 
 def output_result_to_csv(result_obj, config):
