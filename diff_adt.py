@@ -1,5 +1,5 @@
 class DiffConfig():
-    def __init__(self, labs, submissions_dir, solutions_dir, results_dir, csv_path, csv_name):
+    def __init__(self, labs, submissions_dir, solutions_dir, results_dir, csv_path, csv_name, score_out_of):
         self.labs = labs
         self.submissions_dir = submissions_dir
         self.solutions_dir = solutions_dir
@@ -8,6 +8,8 @@ class DiffConfig():
         self.csv_header = 'First,Last,' + str(labs)[1:-1].replace(' ', '')
         self.csv_path = csv_path
         self.csv_name = csv_name
+
+        self.score_out_of = float(score_out_of)
 
 
 class DiffResult():

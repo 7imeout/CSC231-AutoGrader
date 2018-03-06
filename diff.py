@@ -146,7 +146,7 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
         if DEBUG_MODE:
             print(' ... comparison result', diff_result)
 
-        result_obj.add_result(author_name, lab_dir_name, diff_result * 100) # scoring out of 100
+        result_obj.add_result(author_name, lab_dir_name, diff_result * config.score_out_of)
 
 
 def output_result_to_csv(result_obj, config):
@@ -191,7 +191,7 @@ def get_config():
 
     return DiffConfig(lab_file_names,
                       data['submissions_dir'], data['solutions_dir'], data['results_dir'],
-                      data['result_csv_path'], data['result_csv_name'])
+                      data['result_csv_path'], data['result_csv_name'], data['score_out_of'])
 
 
 if __name__ == '__main__':
