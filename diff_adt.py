@@ -1,15 +1,18 @@
 class DiffConfig():
-    def __init__(self, labs, submissions_dir, solutions_dir, results_dir, csv_path, csv_name, score_out_of):
+    def __init__(self, labs, submissions_dir, solutions_dir, rosters_dir, results_dir,
+                 csv_path, csv_name, score_out_of, roster_paths):
         self.labs = labs
         self.submissions_dir = submissions_dir
         self.solutions_dir = solutions_dir
+        self.rosters_dir = rosters_dir
         self.results_dir = results_dir
 
-        self.csv_header = 'First,Last,' + str(labs)[1:-1].replace(' ', '')
+        self.csv_header = 'First,Last,Email,' + str(labs)[1:-1].replace(' ', '')
         self.csv_path = csv_path
         self.csv_name = csv_name
 
         self.score_out_of = float(score_out_of)
+        self.roster_paths = roster_paths
 
 
 class DiffResult():

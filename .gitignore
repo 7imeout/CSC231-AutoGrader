@@ -94,7 +94,9 @@ ENV/
 # input and output directories
 csv
 results
+rosters
 submissions
+solutions/*.alt.txt
 solutions/*.out.txt
 solutions/source/*.m
 

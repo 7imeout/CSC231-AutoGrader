@@ -19,9 +19,12 @@ def main():
 
     # Detect initial run or directory structure corruption and run setup
     if not (os.path.isdir(config.csv_path)
+            and os.path.isdir(config.rosters_dir)
             and os.path.isdir(config.results_dir)
             and os.path.isdir(config.submissions_dir)):
         run_init_setup(config)
+
+    rosters = build_rosters(config.roster_paths)
 
     write_lab_list_for_MATLAB(config)
     if not setup_solution_files(config):
@@ -37,21 +40,22 @@ def main():
     for lab in config.labs:
         diff_lab_outputs(result, lab[:-2], config)
 
-    output_result_to_csv(result, config)
+    output_result_to_csv(result, config, rosters)
     print('ALL DONE!', end='\n\n')
 
 
 def run_init_setup(config):
     print('Looks like this is the first time you are running this script.\n'
           'Let me set up some directories ...', end='\n\n')
-    for p in [config.csv_path, config.results_dir, config.submissions_dir]:
+    for p in [config.csv_path, config.rosters_dir, config.results_dir, config.submissions_dir]:
         if p is config.submissions_dir:
             mkdir(config.submissions_dir)
             for lab in config.labs:
                 mkdir(config.submissions_dir + lab[:-2])
         else:
             mkdir(p)
-    print('\nAll set up! Now, copy student submission folders into ./submissions/labXX/'
+    print('\nAll set up! Now, copy student submissions into {}labXX/, and'.format(config.submissions_dir),
+          '\nplace the class rosters (CSV exported from PolyLearn) into {}.'.format(config.rosters_dir),
           '\nOnce copying is done, please re-run:', *sys.argv)
     exit(0)
 
@@ -101,7 +105,8 @@ def check_solution_source(config):
 
 def generate_new_solutions(config):
     return not call(['matlab', '-nodesktop', '-nosplash', '-nodisplay', '-r',
-                     "try, run('./generate_solution'), catch exc, getReport(exc), end, exit"])
+                     "try, cd '{}', pwd, run('./generate_solution'), catch exc, getReport(exc), end, exit".format(
+                         os.getcwd())])
 
 
 def copy_default_solutions(config):
@@ -116,7 +121,8 @@ def copy_default_solutions(config):
 def generate_MATLAB_output():
     script = 'generate_output_vm.m' if len(sys.argv) > 1 and sys.argv[1].lower() == '-vm' else 'generate_output.m'
     return not call(['matlab', '-nodesktop', '-nosplash', '-nodisplay', '-r',
-                     "try, run('./{}'), catch exc, getReport(exc), end, exit".format(script)])
+                     "try, cd '{}', pwd, run('./{}'), catch exc, getReport(exc), end, exit".format(
+                         os.getcwd(), script)])
 
 
 def diff_lab_outputs(result_obj, lab_dir_name, config):
@@ -146,23 +152,42 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
         if DEBUG_MODE:
             print(' ... comparison result', diff_result)
 
-        result_obj.add_result(author_name, lab_dir_name, diff_result * config.score_out_of)
+        result_obj.add_result(author_name, lab_dir_name, round(diff_result * config.score_out_of, 2))
 
 
-def output_result_to_csv(result_obj, config):
+def output_result_to_csv(result_obj, config, rosters):
     if DEBUG_MODE:
         print('Final Result Object:\n', result_obj)
 
-    result = result_obj.result
-    csv = open(config.csv_path + CURRENT_TIMESTAMP + '_' + config.csv_name, 'w')
-    write_to_csv(csv, config.csv_header)
+    rosters.append(("", []))
 
+    csv_roster = {}
+    for id, roster in rosters:
+        csv = open('{}{}_{}{}.csv'.format(
+            config.csv_path, CURRENT_TIMESTAMP, config.csv_name, ('_' if id else '') + id), 'w')
+        write_to_csv(csv, config.csv_header)
+        csv_roster[id] = (csv, roster)
+
+    # for id, c_r in csv_roster.items():
+    result = result_obj.result
     result_tuple_list = sorted([(k, v) for k, v in result.items()])
 
     for author_name, diff_results in result_tuple_list:
-        entry_str = author_name.replace('_', ',') + ',' + per_author_result_to_csv_entry(config.labs, diff_results)
-        write_to_csv(csv, entry_str)
-    csv.close()
+        id = find_roster_id_for_author(author_name, rosters)
+        entry_str = '{},{},{}'.format(
+            author_name.replace('_', ','),
+            csv_roster[id][1][author_name] if id else '',
+            per_author_result_to_csv_entry(config.labs, diff_results)
+        )
+
+        csv_to_write_to = csv_roster[id][0]
+        write_to_csv(csv_to_write_to, entry_str)
+
+        if csv_to_write_to is not csv_roster[""][0]:
+            write_to_csv(csv_roster[""][0], entry_str)
+
+    for csv, _ in csv_roster.values():
+        csv.close()
 
 
 def per_author_result_to_csv_entry(lab_file_names, author_result):
@@ -171,7 +196,14 @@ def per_author_result_to_csv_entry(lab_file_names, author_result):
         lab = lab_file_name[:-2]
         csv_entry_str += str(author_result[lab]) if lab in author_result else ''
         csv_entry_str += ','
-    return csv_entry_str
+    return csv_entry_str[:-1]
+
+
+def find_roster_id_for_author(author_name, rosters):
+    for id, roster in rosters:
+        if author_name in roster:
+            return id
+    return ""
 
 
 def write_to_csv(csv_file, line_to_write):
@@ -190,8 +222,28 @@ def get_config():
         lab_file_names.append('lab{:02}.m'.format(num) if num else 'final.m')
 
     return DiffConfig(lab_file_names,
-                      data['submissions_dir'], data['solutions_dir'], data['results_dir'],
-                      data['result_csv_path'], data['result_csv_name'], data['score_out_of'])
+                      data['submissions_dir'], data['solutions_dir'], data['rosters_dir'], data['results_dir'],
+                      data['result_csv_path'], data['result_csv_name'], data['score_out_of'],
+                      data['roster_paths'])
+
+
+def build_rosters(roster_paths):
+    rosters = []
+
+    for id, path in roster_paths:
+        roster_file = open(path, 'r')
+        lines = roster_file.readlines()[1:]
+
+        roster = {}
+        for l in lines:
+            tokens = l.split(',')
+            author_name = '_'.join(tokens[:2])
+            author_email = tokens[2]
+            roster[author_name] = author_email
+
+        rosters.append((id, roster))
+
+    return rosters
 
 
 if __name__ == '__main__':

@@ -3,7 +3,12 @@
   "score_out_of": 100.0,
   "submissions_dir" : "./submissions/",
   "solutions_dir" : "./solutions/",
+  "rosters_dir": "./rosters/",
   "results_dir": "./results/",
   "result_csv_path" : "./csv/",
-  "result_csv_name" : "result.csv"
+  "result_csv_name" : "result",
+  "roster_paths": [
+    ["03", "./rosters/CSC-231-03-2184.csv"],
+    ["08", "./rosters/CSC-231-08-2184.csv"]
+  ]
 }
