@@ -7,7 +7,7 @@ class DiffConfig():
         self.rosters_dir = rosters_dir
         self.results_dir = results_dir
 
-        self.csv_header = 'First,Last,Email,' + str(labs)[1:-1].replace(' ', '')
+        self.csv_header = 'First,Last,Email,' # + str(labs)[1:-1].replace(' ', '')
         self.csv_path = csv_path
         self.csv_name = csv_name
 

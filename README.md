@@ -13,8 +13,8 @@ New Features
 Latest update: Sunday, April 8, 2018
 
 * All-or-nothing scheme is gone! Now, Levenshtein distance (edit distance) is used to give partial credit. Edit distance is subtracted from the length of the reference output, such that the edit distance equal to or greater than the length of the distance results in no credit.
-* This tool now generates separate CSV files for each section of the course being taught, based on the roster provided.
-* Generated CSVs are also PolyLearn-compatible now. You should be able to use the output of this program to upload grades directly to PolyLearn's gradebook.
+* This tool now generates separate CSV files for each section of the course being taught (based on the roster provided), as well as separate CSVs for each individual lab assignment.
+* All of the separately generated CSVs allow for PolyLearn-compatibility. You should be able to use the output of this program to upload grades directly to PolyLearn's grade book.
 
 Past update: Sunday, April 9, 2017
 
@@ -78,11 +78,11 @@ How to Use This Auto Grader
 1. When the script finishes execution without encountering any unexpected errors, you should see text files generated under `/results/` directory, and a grading result summarized in a CSV file under `/csv/` (or in whatever directories you have specified in `diff_config.json`).
 
 
-> **Note:**
-> 
-> - Student submission that causes runtime error during MATLAB run will simply cause the student's output to include the MATLAB error message.
-> - Formula used to calculate the score is: `max(0, (length_of_referene_solution - edit_distance) / length_of_referene_solution * score_out_of)`
-> - To further investigate the cause of any mismatches, I recommend using `diff` (UNIX), or [diffchecker.com](https://diffchecker.com).
+   > **Note:**
+   > 
+   > - Student submission that causes runtime error during MATLAB run will simply cause the student's output to include the MATLAB error message.
+   > - Formula used to calculate the score is: `max(0, (length_of_referene_solution - edit_distance) / length_of_referene_solution * score_out_of)`
+   > - To further investigate the cause of any mismatches, I recommend using `diff` (UNIX), or [diffchecker.com](https://diffchecker.com).
 
 Known Issues and Workarounds
 -------------

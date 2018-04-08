@@ -41,6 +41,9 @@ def main():
         diff_lab_outputs(result, lab[:-2], config)
 
     output_result_to_csv(result, config, rosters)
+    for lab in config.labs:
+        output_result_to_csv(result, config, rosters, lab_num=lab[3:-2])
+
     print('ALL DONE!', end='\n\n')
 
 
@@ -155,7 +158,7 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
         result_obj.add_result(author_name, lab_dir_name, round(diff_result * config.score_out_of, 2))
 
 
-def output_result_to_csv(result_obj, config, rosters):
+def output_result_to_csv(result_obj, config, rosters, lab_num=''):
     if DEBUG_MODE:
         print('Final Result Object:\n', result_obj)
 
@@ -163,21 +166,34 @@ def output_result_to_csv(result_obj, config, rosters):
 
     csv_roster = {}
     for id, roster in rosters:
-        csv = open('{}{}_{}{}.csv'.format(
-            config.csv_path, CURRENT_TIMESTAMP, config.csv_name, ('_' if id else '') + id), 'w')
-        write_to_csv(csv, config.csv_header)
+        csv = open('{}{}_{}{}{}.csv'.format(
+            config.csv_path,
+            CURRENT_TIMESTAMP,
+            config.csv_name,
+            ('_' if id else '') + id,
+            ('_lab' + lab_num) if lab_num else ''
+        ), 'w')
+
+        if lab_num:
+            write_to_csv(csv, config.csv_header + 'lab' + lab_num)
+        else:
+            write_to_csv(csv, config.csv_header + str(config.labs)[1:-1].replace(' ', ''))
+
         csv_roster[id] = (csv, roster)
 
-    # for id, c_r in csv_roster.items():
     result = result_obj.result
     result_tuple_list = sorted([(k, v) for k, v in result.items()])
 
     for author_name, diff_results in result_tuple_list:
         id = find_roster_id_for_author(author_name, rosters)
+        all_results = per_author_result_to_csv_entry(config.labs, diff_results)
+
         entry_str = '{},{},{}'.format(
             author_name.replace('_', ','),
             csv_roster[id][1][author_name] if id else '',
-            per_author_result_to_csv_entry(config.labs, diff_results)
+            all_results if not lab_num else (
+                str(diff_results['lab' + lab_num]) if 'lab' + lab_num in diff_results else ''
+            )
         )
 
         csv_to_write_to = csv_roster[id][0]

@@ -1,5 +1,5 @@
 {
-  "labs" : [1],
+  "labs" : [1,2,3],
   "score_out_of": 100.0,
   "submissions_dir" : "./submissions/",
   "solutions_dir" : "./solutions/",
