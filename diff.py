@@ -147,8 +147,8 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
             print('comparing', solution_file, 'and', submissions_dir + f, end='')
 
         if os.path.isfile(alt_solution_file):
-            diff_result = cmp(solution_file, results_dir + f) \
-                          or (cmp(alt_solution_file, results_dir + f))
+            diff_result = max(cmp(solution_file, results_dir + f),
+                              cmp(alt_solution_file, results_dir + f))
         else:
             diff_result = cmp(solution_file, results_dir + f)
 

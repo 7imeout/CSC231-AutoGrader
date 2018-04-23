@@ -14,4 +14,4 @@ def cmp(ref_file_path, sub_file_path):
         return -1.0
 
     d = Levenshtein.distance(ref_str, sub_str)
-    return (len(ref_str) - d) / len(ref_str)
+    return max((len(ref_str) - d) / len(ref_str), 0.00)
