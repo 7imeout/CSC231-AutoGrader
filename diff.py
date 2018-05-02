@@ -7,7 +7,7 @@ from subprocess import call
 from diff_lev import *
 
 CURRENT_TIMESTAMP = strftime("%Y-%m-%d-%H%M", localtime())
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 
 def main():
