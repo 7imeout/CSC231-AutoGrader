@@ -7,7 +7,7 @@ from subprocess import call
 from diff_lev import *
 
 CURRENT_TIMESTAMP = strftime("%Y-%m-%d-%H%M", localtime())
-DEBUG_MODE = False
+DEBUG_MODE = True
 
 
 def main():
@@ -140,11 +140,11 @@ def diff_lab_outputs(result_obj, lab_dir_name, config):
     alt_solution_file = solutions_dir + lab_dir_name + '.alt.txt'
 
     for f in files:
-        second_underscore_index = f.find('_', f.index('_') + 1)
-        author_name = f[:second_underscore_index]
+        lab_index = f.find('_lab')
+        author_name = join_last_name(f[:lab_index])
 
         if DEBUG_MODE:
-            print('comparing', solution_file, 'and', submissions_dir + f, end='')
+            print('comparing', solution_file, 'and', submissions_dir + f, 'for ' + author_name, end='')
 
         if os.path.isfile(alt_solution_file):
             diff_result = max(cmp(solution_file, results_dir + f),
@@ -217,6 +217,11 @@ def per_author_result_to_csv_entry(lab_file_names, author_result):
 
 def find_roster_id_for_author(author_name, rosters):
     for id, roster in rosters:
+
+        if DEBUG_MODE:
+            print('Author name used to look up in roster: ' + author_name)
+            print('Roster\n' + str(roster))
+
         if author_name in roster:
             return id
     return ""
@@ -241,6 +246,14 @@ def get_config():
                       data['submissions_dir'], data['solutions_dir'], data['rosters_dir'], data['results_dir'],
                       data['result_csv_path'], data['result_csv_name'], data['score_out_of'],
                       data['roster_paths'])
+
+
+def join_last_name(orig_name_str, wrapper_str='"'):
+    tokens = orig_name_str.split('_')
+    if len(tokens) > 2:
+        return '_'.join([tokens[0], '{}{}{}'.format(wrapper_str, ' '.join(tokens[1:]), wrapper_str)])
+    else:
+        return orig_name_str
 
 
 def build_rosters(roster_paths):
